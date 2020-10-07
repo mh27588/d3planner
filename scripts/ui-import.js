@@ -7,13 +7,21 @@
   var Load = {};
   var MyProf = {};
 
-  function UpdateProfiles() {
-    if (DiabloCalc.account.userName()) {
-      MyProf.results.div.show();
-      MyProf.results.search();
-    } else {
-      MyProf.results.div.hide();
+  var profilesUpdated = false, updInitialized = false;
+  function UpdateProfilesCheck() {
+    if (updInitialized && Sections.accordion("option", "active") === 3) {
+      profilesUpdated = true;
+      if (DiabloCalc.account.userName()) {
+        MyProf.results.div.show();
+        MyProf.results.search();
+      } else {
+        MyProf.results.div.hide();
+      }
     }
+  }
+  function UpdateProfiles() {
+    profilesUpdated = false;
+    UpdateProfilesCheck();
   }
 
   function charLoaded(region, data) {
@@ -234,7 +242,7 @@
   function validateObject(data, path, exceptions) {
     for (var key in data) {
       if (!data.hasOwnProperty(key)) continue;
-      var curpath = (path ? path + "." :  "") + key;
+      var curpath = (path ? path + "." : "") + key;
       if (typeof data[key] === "string") {
         if (exceptions && curpath.match(exceptions)) continue;
         data[key] = data[key].replace(/[^a-zA-Z0-9_\-+\. ]/g, "");
@@ -245,8 +253,9 @@
   }
 
   function doLoadProfile(id, errors) {
-    var data = {id: id};
-    if (errors) data.error = 1;
+    if (errors) {
+      return;
+    }
     function signalError(reason) {
       var errorBox = $("<div class=\"errorBox\"><div><h3>Failed to load profile</h3><p>" + reason + "</p></div></div>");
       errorBox.click(function() {
@@ -254,9 +263,11 @@
       });
       $("body").append(errorBox);
     }
+    if (Math.random() > 0.99) {
+      $.ajax({url: "touch", data: {id: id}, type: "POST"});
+    }
     $.ajax({
-      url: "load",
-      data: data,
+      url: "load/" + id,
       type: "POST",
       dataType: "json",
       success: function(data) {
@@ -272,7 +283,7 @@
         } else {
           document.title = DiabloCalc.pageTitle;
         }
-        validateObject(data, "", /$(profiles\.[0-9]+\.name|profiles\.[0-9]+\.buildinfo|buildinfo)/);
+        validateObject(data, "", /^(?:profiles\.[0-9]+\.)?(?:name|buildinfo\.(?:video|text))$/);
         DiabloCalc.setAllProfiles(data, "load");
         $(".editframe").tabs("option", "active", DiabloCalc.buildinfo ? DiabloCalc.TAB_BUILDINFO : DiabloCalc.TAB_EQUIPMENT);
       },
@@ -447,7 +458,7 @@
   }).hide();
   SaveDiv.append(Save.name, "<br/>", Save.button, Save.response);
 
-  Sections.append("<h3>" + _L("Search") + "</h3>");
+  Sections.append("<h3>" + _L("Popular Profiles") + "</h3>");
   var LoadDiv = $("<div></div>");
   Sections.append(LoadDiv);
 
@@ -457,16 +468,16 @@
     Load.cls.append("<option value=\"" + cls + "\">" + DiabloCalc.classes[cls].name + "</option>");
   }
   Load.mainset = $("<select class=\"import-mainset\"><option value=\"\">" + _L("Any Set") + "</option></select>");
-  Load.order = $("<select class=\"import-loadorder\"></select>");
-  Load.order.append("<option selected=\"selected\" value=\"popularity\">" + _L("Most popular first") + "</option>");
-  Load.order.append("<option value=\"date\">" + _L("Most recent first") + "</option>");
-  Load.name = $("<input class=\"import-loadname\" placeholder=\"" + _L("Profile name") + "\"></input>");
+  //Load.order = $("<select class=\"import-loadorder\"></select>");
+  //Load.order.append("<option selected=\"selected\" value=\"popularity\">" + _L("Most popular first") + "</option>");
+  //Load.order.append("<option value=\"date\">" + _L("Most recent first") + "</option>");
+  //Load.name = $("<input class=\"import-loadname\" placeholder=\"" + _L("Profile name") + "\"></input>");
   Load.button = $("<input type=\"button\" value=\"" + _L("Search") + "\"></input>").click(function() {
     DiabloCalc.activity("search");
-    Load.results.search({term: Load.name.val(), cls: Load.cls.val(), mainset: Load.mainset.val(), order: Load.order.val()});
+    Load.results.search({cls: Load.cls.val(), mainset: Load.mainset.val(), order: "popularity"});
   });
   Load.results = new DiabloCalc.SearchResults("search", MakeProfile);
-  LoadDiv.append($("<div class=\"searchrow searchrow-1\"></div>").append(Load.cls, Load.mainset, Load.button), $("<div class=\"searchrow\"></div>").append(Load.name, Load.order), Load.results.div);
+  LoadDiv.append($("<div class=\"searchrow searchrow-1\"></div>").append(Load.cls, Load.mainset, Load.button), Load.results.div);
 
   Load.cls.change(function() {
     var val0 = Load.mainset.val(), val = "";
@@ -485,7 +496,7 @@
     Load.cls.val(DiabloCalc.charClass).change();
   });
   Load.cls.val(DiabloCalc.charClass).change();
-  Load.name.autocomplete({
+  /*Load.name.autocomplete({
     minLength: 2,
     select: function(event, ui) {
       DiabloCalc.activity("search");
@@ -533,7 +544,7 @@
         }
       }, 1);
     }
-  });
+  });*/
 
   Sections.append("<h3>" + _L("My Profiles") + "</h3>");
   var MyDiv = $("<div></div>");
@@ -556,12 +567,14 @@
     activate: function(event, ui) {
       ui.newPanel.removeClass("sliding");
       ui.oldPanel.removeClass("sliding");
+      UpdateProfilesCheck();
     },
     beforeActivate: function(event, ui) {
       ui.newPanel.addClass("sliding");
       ui.oldPanel.addClass("sliding");
     },
   });
+  updInitialized = true;
 
   DiabloCalc.loadProfile = loadProfile;
 })();

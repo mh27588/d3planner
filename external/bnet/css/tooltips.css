@@ -33,13 +33,14 @@
 .d3-item-properties .item-effects li { padding-left: 16px; background: url("../images/icons/primary.gif") 0 3px no-repeat; }
 .d3-item-properties .item-effects li.d3-item-property-utility { background: url("../images/icons/utility.gif") 0 3px no-repeat; }
 .d3-item-properties .item-effects li.d3-item-property-enchant { background: url("../images/icons/enchant.gif") 0 3px no-repeat; }
-.d3-item-properties .item-effects li.secondary { background: url("../images/icons/secondary.gif") 0 3px no-repeat; }
+.d3-item-properties .item-effects li.secondary { background: url("../images/icons/secondary.html") 0 3px no-repeat; }
 .d3-item-properties .item-effects li.empty-socket { background: url("../images/item/empty-socket.png") 0 center no-repeat; }
 .d3-item-properties .item-effects li.full-socket { line-height:18px; min-height:18px; background: none; padding-left:0; padding-top:7px; white-space:nowrap }
 .d3-item-properties .item-effects li.full-socket ul { padding-left: 16px }
 .d3-item-properties .item-effects li.full-socket .gem { float:left; width:17px; height:17px; margin-right:4px }
 .d3-item-properties .item-effects li.full-socket .jewel-effect { white-space:normal }
 .d3-item-properties .item-effects li.full-socket .socket-effect { padding-left: 16px; background: url("../images/icons/primary.gif") 0px 3px no-repeat; display:inline-block; min-height:18px; line-height:18px; white-space:normal }
+.d3-item-properties .item-effects li.item-no-background { background: none; }
 
 /* Item tooltips should more closely match what we see in game */
 .d3-item-properties .item-effects .item-property-category { padding-top: 6px; }
@@ -49,7 +50,7 @@
 .d3-item-properties .item-effects .gem-effect { color: white; }
 .d3-item-properties .item-effects-choice { margin-bottom: 10px; }
 
-.d3-tooltip-wrapper { background: #1d180e; padding: 1px; border: 1px solid #322a20; max-width: 354px; position: absolute; z-index: 2147483647; border-radius: 2px; box-shadow: 0 0 10px #000; }
+.d3-tooltip-wrapper { background: #1d180e; padding: 1px; border: 1px solid #322a20; max-width: 355px; position: absolute; z-index: 2147483647; border-radius: 2px; box-shadow: 0 0 10px #000; }
 .d3-tooltip-wrapper-inner { background: black; }
 
 
@@ -89,7 +90,8 @@
   .d3-tooltip .tooltip-head-yellow { background-position: 0 -120px; }
   .d3-tooltip .tooltip-head-orange { background-position: 0 -160px; }
   .d3-tooltip .tooltip-head-purple { background-position: 0 -200px; }
-  .d3-tooltip .tooltip-head-green  { background-position: 0 -240px; }
+	.d3-tooltip .tooltip-head-green,
+	.d3-tooltip .tooltip-head-teal   { background-position: 0 -240px; }
 	.d3-tooltip .d3-tooltip-item-wrapper-PrimalAncientLegendary .tooltip-head-orange { background-position: 0 -280px; }
 	.d3-tooltip .d3-tooltip-item-wrapper-PrimalAncientLegendary .tooltip-head-green  { background-position: 0 -320px; }
 
@@ -461,6 +463,7 @@
   .d3-color-red, .d3-color-red a { color: #ff0000 !important; }
   .d3-color-white, .d3-color-white a { color: #fff !important; }
   .d3-color-yellow, .d3-color-yellow a { color: #ffff00 !important; }
+	.d3-color-teal, .d3-color-teal a { color: #65c2a7 !important; }
 
   a.d3-color-blue:hover, .d3-color-blue a:hover, a:hover .d3-color-blue,
   a.d3-color-gray:hover, .d3-color-gray a:hover, a:hover .d3-color-gray,
@@ -470,7 +473,20 @@
   a.d3-color-purple:hover, .d3-color-purple a:hover, a:hover .d3-color-purple,
   a.d3-color-red:hover, .d3-color-red a:hover, a:hover .d3-color-red,
   a.d3-color-white:hover, .d3-color-white a:hover, a:hover .d3-color-white,
-  a.d3-color-yellow:hover, .d3-color-yellow a:hover a:hover .d3-color-yellow { color: #fff !important; }
+	a.d3-color-yellow:hover, .d3-color-yellow a:hover a:hover .d3-color-yellow,
+	a.d3-color-teal:hover, .d3-color-teal a:hover a:hover .d3-color-teal { color: #fff !important; }
+
+	/* map colors from GDA to more subtle colors used on the site */
+	.d3-color-FF888888, .d3-color-ff888888, .d3-color-ff888888 a { color: #909090 !important; }
+	.d3-color-ffff8000, .d3-color-ffff8000 a { color: #bf642f !important; }
+	.d3-color-ff6969ff, .d3-color-ff6969ff a { color: #7979d4 !important; }
+	.d3-color-ffc7b377, .d3-color-ffc7b377 a { color: #ad835a !important; }
+	.d3-color-ff00ff00, .d3-color-ff00ff00 a { color: #8bd442 !important; }
+	.d3-color-ff9b9b9b, .d3-color-ff9b9b9b a { color: #9b9b9b !important; }
+	.d3-color-magic, .d3-color-magic a { color: #bda6db !important; }
+	.d3-color-legendary, .d3-color-legendary a { color: #bf642f !important; }
+	.d3-color-ffffffff, .d3-color-ffffffff a { color: #ffffff !important; }
+	.d3-color-ff696969, .d3-color-ff696969 a { color: #696969 !important; }
 
   /* runes */
   .d3-color-rune { color: #F3E6D0 !important; }
@@ -481,4 +497,6 @@
   .d3-color-rune-e { color: #f7e9b7 !important; }
 
 .d3-debug { display: none; }
-.tooltip-icon-bullet { display: inline-block; width: 8px; height: 8px; margin-right: 2px; vertical-align: middle; background: url("../images/icons/bullet.gif") no-repeat; }
+.tooltip-icon-bullet { display: inline-block; width: 12px; height: 12px; margin-right: 0px; vertical-align: middle; background: url("../images/icons/bullet.gif") no-repeat; }
+.tooltip-icon-enchant { display: inline-block; width: 12px; height: 12px; margin-right: 0px; vertical-align: middle; background: url("../images/icons/enchant.gif") no-repeat; }
+.tooltip-icon-utility { display: inline-block; width: 12px; height: 12px; margin-right: 0px; vertical-align: middle; background: url("../images/icons/utility.gif") no-repeat; }
