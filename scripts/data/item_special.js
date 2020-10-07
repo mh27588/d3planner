@@ -1861,7 +1861,7 @@ DiabloCalc.itemaffixes = {
   },
   set_valor_6pc: {
     buffs: function(value, stats) {
-      return {dmgmul: {skills: ["fistsoftheheavens", "heavensfury"], percent: 20000}};
+      return {dmgmul: {skills: ["fistoftheheavens", "heavensfury"], percent: 20000}};
     },
   },
   set_justice_4pc: {
